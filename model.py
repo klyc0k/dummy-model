@@ -1,10 +1,12 @@
 import pickle as pkl
 import numpy as np
+import time
 
 
 class Model:
     def __init__(self):
-        self.model = pkl.load('binary/dummy_lr_model.pkl')
+        with open('dummy_lr_model.pkl', 'rb') as f:
+            self.model = pkl.load(f)
 
     def run(self, input_data):
         # preprocess
@@ -15,20 +17,22 @@ class Model:
         #   petal_length: val,
         #   petal_width: val,
         # }
-        processed_data = np.array([input_data['sepal_length'],
-                                   input_data['sepal_width'],
-                                   input_data['petal_length'],
-                                   input_data['petal_width']])
+        processed_data = np.array([[input_data['sepal_length'],
+                                    input_data['sepal_width'],
+                                    input_data['petal_length'],
+                                    input_data['petal_width']]])
 
         # predict
-        result = self.model.predict(processed_data)
-        score = self.model.score(processed_data)
+        label = self.model.predict(processed_data)[0]
+        proba = self.model.predict_proba(processed_data)
+        score = proba[0, label]
 
-        # postprocess
+        # post-process
         response = {
             'decision': {
-                'class': result,
-                'score': score
+                'class': int(label),
+                'score': float(score)
             }
         }
+        time.sleep(2) # lets assume this model takes time to process
         return response
