@@ -27,6 +27,10 @@ class Model:
         proba = self.model.predict_proba(processed_data)
         score = proba[0, label]
 
+        # add some random fluctuation to some random samples
+        if np.random.rand() < 0.2:
+            score += np.random.uniform(-0.2, 0.2)
+
         # post-process
         response = {
             'decision': {
