@@ -29,7 +29,7 @@ class Model:
 
         # add some random fluctuation to some random samples
         if np.random.rand() < 0.2:
-            score += np.random.uniform(-0.2, 0.2)
+            score += np.random.uniform(-0.2, 0)
 
         # post-process
         response = {
